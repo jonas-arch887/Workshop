@@ -1,0 +1,220 @@
+/* =========================================================
+   FrachtHub Design System — colors_and_type.css
+   Brand: Frachthub · Agentur für Spediteure (KI & Automation in Logistik)
+   ========================================================= */
+
+/* ---------- Webfont — Manrope (self-hosted .ttf files in fonts/) ---------- */
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-ExtraLight.ttf') format('truetype'); font-weight: 200; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-Light.ttf') format('truetype');      font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-Regular.ttf') format('truetype');    font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-Medium.ttf') format('truetype');     font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-SemiBold.ttf') format('truetype');   font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-Bold.ttf') format('truetype');       font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-ExtraBold.ttf') format('truetype');  font-weight: 800; font-style: normal; font-display: swap; }
+
+:root {
+  /* ------ BRAND COLORS (from Brandguid.png) ------ */
+  --fh-petrol:        #0F766E;  /* 1. Primärfarbe — Petrol      */
+  --fh-ink:           #020617;  /* 2. Dunkler Text / Akzent     */
+  --fh-bg:            #F9FAFB;  /* 3. Hintergrund (Off-White)   */
+  --fh-surface:       #FFFFFF;  /* 4. Karten / Boxen (Reines Weiß) */
+  --fh-neutral:       #6B7280;  /* 5. Neutralgrau dezent        */
+  --fh-border:        #E5E7EB;  /* Hellgrauer Border (Brand doc) */
+
+  /* ------ PETROL SCALE (derived) ------ */
+  --fh-petrol-50:     #E6F3F1;
+  --fh-petrol-100:    #CCE7E3;
+  --fh-petrol-200:    #99CFC7;
+  --fh-petrol-300:    #5DB3A7;
+  --fh-petrol-400:    #2E968A;
+  --fh-petrol-500:    #0F766E;  /* = brand primary */
+  --fh-petrol-600:    #0B5E57;
+  --fh-petrol-700:    #094842;
+  --fh-petrol-800:    #06332F;
+  --fh-petrol-900:    #04211F;
+
+  /* ------ INK / SLATE SCALE (derived from #020617) ------ */
+  --fh-ink-900:       #020617;  /* brand dark */
+  --fh-ink-800:       #0B1220;
+  --fh-ink-700:       #111827;
+  --fh-ink-600:       #1F2937;
+  --fh-ink-500:       #374151;
+  --fh-ink-400:       #4B5563;
+  --fh-ink-300:       #6B7280;  /* = brand neutral */
+  --fh-ink-200:       #9CA3AF;
+  --fh-ink-100:       #D1D5DB;
+  --fh-ink-50:        #E5E7EB;
+
+  /* ------ SEMANTIC FOREGROUND / BACKGROUND ------ */
+  --fg-1:             var(--fh-ink);         /* headlines, logo wordmark left */
+  --fg-2:             var(--fh-ink-600);     /* strong body                   */
+  --fg-3:             var(--fh-neutral);     /* secondary / descriptions      */
+  --fg-4:             var(--fh-ink-200);     /* placeholder / disabled        */
+  --fg-accent:        var(--fh-petrol);      /* links, accents, "HUB" tone    */
+  --fg-on-petrol:     #FFFFFF;               /* text on petrol surface        */
+  --fg-on-ink:        #F9FAFB;               /* text on ink surface           */
+
+  --bg-page:          var(--fh-bg);
+  --bg-surface:       var(--fh-surface);
+  --bg-muted:         #F3F4F6;
+  --bg-ink:           var(--fh-ink);
+  --bg-petrol:        var(--fh-petrol);
+  --bg-petrol-soft:   var(--fh-petrol-50);
+
+  --border-default:   var(--fh-border);
+  --border-strong:    #D1D5DB;
+  --border-petrol:    rgba(15,118,110,0.25);
+
+  /* ------ SEMANTIC / STATUS (for quote/order states, inspired by agency concept) ------ */
+  --status-new-bg:        #FEF3C7;  --status-new-fg:        #854D0E;
+  --status-sent-bg:       var(--fh-petrol-50); --status-sent-fg: var(--fh-petrol-700);
+  --status-won-bg:        #D1FAE5;  --status-won-fg:        #065F46;
+  --status-lost-bg:       #FEE2E2;  --status-lost-fg:       #991B1B;
+  --status-info-bg:       #DBEAFE;  --status-info-fg:       #1E40AF;
+
+  /* ------ TYPOGRAPHY ------ */
+  --font-sans:      'Manrope', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display:   'Manrope', ui-sans-serif, sans-serif;        /* same family, heavier weight */
+  --font-mono:      ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+
+  /* Weights used in Manrope per brand doc */
+  --fw-regular:     400;  /* @kind font */
+  --fw-medium:      500;  /* @kind font */
+  --fw-semibold:    600;  /* @kind font */
+  --fw-bold:        700;  /* @kind font */
+  --fw-extrabold:   800;  /* @kind font */
+
+  /* Type scale — tuned for Manrope, trafficked against 1920-grid and 16px body */
+  --fs-display:     clamp(44px, 5.2vw, 72px);   /* @kind font */ /* hero headline */
+  --fs-h1:          clamp(32px, 3.2vw, 44px);   /* @kind font */
+  --fs-h2:          clamp(26px, 2.4vw, 34px);   /* @kind font */
+  --fs-h3:          22px;  /* @kind font */
+  --fs-h4:          18px;  /* @kind font */
+  --fs-lg:          17px;  /* @kind font */
+  --fs-body:        15px;  /* @kind font */
+  --fs-sm:          13px;  /* @kind font */
+  --fs-xs:          12px;  /* @kind font */
+  --fs-micro:       11px;  /* @kind font */
+
+  --lh-tight:       1.1;   /* @kind font */
+  --lh-snug:        1.25;  /* @kind font */
+  --lh-normal:      1.5;   /* @kind font */
+  --lh-loose:       1.7;   /* @kind font */
+
+  --ls-tight:       -0.02em;  /* @kind font */
+  --ls-normal:      0;        /* @kind font */
+  --ls-wide:        0.04em;    /* @kind font */ /* used on FRACHTHUB wordmark */
+  --ls-wider:       0.08em;   /* @kind font */
+
+  /* ------ SPACING ------ */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ------ RADII ------ */
+  --radius-xs:  4px;
+  --radius-sm:  6px;
+  --radius-md:  8px;      /* default buttons */
+  --radius-lg:  10px;     /* cards / feature boxes */
+  --radius-xl:  12px;     /* hero mockup card */
+  --radius-2xl: 16px;
+  --radius-pill: 9999px;  /* badges */
+
+  /* ------ SHADOWS — minimal, crisp ------ */
+  --shadow-xs:   0 1px 2px rgba(2,6,23,0.04);
+  --shadow-sm:   0 1px 3px rgba(2,6,23,0.06), 0 1px 2px rgba(2,6,23,0.04);
+  --shadow-md:   0 4px 12px rgba(2,6,23,0.06), 0 2px 4px rgba(2,6,23,0.04);
+  --shadow-lg:   0 12px 28px rgba(2,6,23,0.08), 0 4px 8px rgba(2,6,23,0.04);
+  --shadow-petrol: 0 8px 24px rgba(15,118,110,0.22);
+  --shadow-inset: inset 0 0 0 1px var(--fh-border);
+
+  /* ------ MOTION ------ */
+  --ease-standard:  cubic-bezier(0.4, 0, 0.2, 1);  /* @kind other */
+  --ease-out:       cubic-bezier(0, 0, 0.2, 1);    /* @kind other */
+  --ease-in:        cubic-bezier(0.4, 0, 1, 1);    /* @kind other */
+  --dur-fast:       120ms;  /* @kind other */
+  --dur-base:       180ms;  /* @kind other */
+  --dur-slow:       280ms;  /* @kind other */
+
+  /* ------ LAYOUT ------ */
+  --container-max:  1200px;  /* @kind spacing */
+  --nav-height:     72px;    /* @kind spacing */
+}
+
+/* =========================================================
+   BASE ELEMENTS — semantic defaults
+   ========================================================= */
+
+html, body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  color: var(--fg-2);
+  background: var(--bg-page);
+  line-height: var(--lh-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--fg-1);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  font-weight: var(--fw-semibold);
+}
+
+h1  { font-size: var(--fs-h1);  font-weight: var(--fw-bold); }
+h2  { font-size: var(--fs-h2);  font-weight: var(--fw-semibold); }
+h3  { font-size: var(--fs-h3);  font-weight: var(--fw-semibold); }
+h4  { font-size: var(--fs-h4);  font-weight: var(--fw-medium); }
+
+.display {
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  color: var(--fg-1);
+}
+.display em, h1 em, h2 em { font-style: normal; color: var(--fg-accent); }
+
+p  { font-size: var(--fs-body); color: var(--fg-3); line-height: var(--lh-loose); }
+small { font-size: var(--fs-sm); color: var(--fg-3); }
+
+a {
+  color: var(--fg-accent);
+  text-decoration: none;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+a:hover { opacity: 0.75; }
+
+code, pre { font-family: var(--font-mono); font-size: 13px; }
+
+/* Wordmark-style utility — mirrors "FRACHT + HUB" in the logo */
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--fg-1);
+}
+.wordmark .accent { color: var(--fg-accent); }
+
+/* Eyebrow / kicker — used above headlines */
+.eyebrow {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--fg-accent);
+}
