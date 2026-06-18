@@ -18,7 +18,7 @@
         "Kurzer Abgleich vorab: Das ist nur ein kleiner Setup-Block ohne Bewertung. So stellen wir sicher, dass wir im Workshop alle die gleiche Ausgangsbasis haben.",
       fields: [
         { id: "unternehmen", type: "text", label: "Unternehmensname", placeholder: "z. B. Müller Spedition GmbH" },
-        { id: "ansprechpartner", type: "text", label: "Ansprechpartner — Name & Position", placeholder: "z. B. Anna Berg, Geschäftsführerin" },
+        { id: "ansprechpartner", type: "text", label: "Ansprechpartner", placeholder: "z. B. Anna Berg" },
         {
           id: "taetigkeit", type: "multi", label: "Tätigkeitsbereich",
           help: "Mehrfachauswahl möglich.",
