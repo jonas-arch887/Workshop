@@ -247,7 +247,7 @@
   .route-motif { width: 240px; height: 40px; display: block; margin: 6px 0 34px; }
   .route-base { stroke: var(--line-strong); stroke-width: 2; stroke-dasharray: 3 7; stroke-linecap: round; }
   .route-fill { stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; filter: drop-shadow(0 0 5px var(--accent-glow)); }
-  .route-motif.is-animated .route-fill { stroke-dasharray: 210; stroke-dashoffset: 210; animation: routeDraw 1.5s var(--ease-out) .2s forwards; }
+  .route-motif.is-animated .route-fill { stroke-dasharray: var(--route-len, 210); stroke-dashoffset: var(--route-len, 210); animation: routeDraw 1.5s var(--ease-out) .2s forwards; }
   @keyframes routeDraw { to { stroke-dashoffset: 0; } }
   .route-dot { fill: var(--ink-0); stroke: var(--accent); stroke-width: 2.4; }
   .route-dot.end { fill: var(--accent); }
@@ -347,12 +347,20 @@
   .rbtn--ghost:hover { background: var(--surface-2); color: var(--txt-1); }
   .rbtn--primary { background: #0F766E; color: #fff; }
   .rbtn--primary:hover { background: #0B5E57; }
+  .rbtn--primary:disabled { opacity: 0.6; cursor: not-allowed; }
+  .rbtn--success { background: #166534; color: #fff; cursor: default; }
+  .report-send-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .report-send-error { font-size: 11px; color: #f87171; }
+  .inp--error { border-color: #f87171 !important; box-shadow: 0 0 0 2px rgba(248,113,113,.2); }
+  .result-mail-error { font-size: 12px; color: #f87171; margin-top: 6px; }
   .report-toggle { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 9px; overflow: hidden; }
   .report-toggle button { font-family: inherit; font-size: 12.5px; font-weight: 600; padding: 8px 15px; background: transparent; color: var(--txt-3); border: 0; cursor: pointer; transition: background var(--dur-base), color var(--dur-base); }
   .report-toggle button + button { border-left: 1px solid var(--line-strong); }
   .report-toggle button:hover { color: var(--txt-1); }
   .report-toggle button.is-on { background: var(--accent); color: var(--ink-0); }
   .report-scroll { flex: 1; overflow-y: auto; padding: 36px 20px 60px; display: flex; justify-content: center; }
+  .report-frame { flex: 1; width: 100%; border: none; background: #f5f5f4; }
+  .report-frame-loading { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--txt-3); font-size: 14px; }
 
   .report-doc {
     width: 820px; max-width: 100%; background: #FFFFFF; color: #1F2937;
@@ -452,6 +460,7 @@
       requestAnimationFrame(function () { document.documentElement.classList.add('anim-on'); });
     });
   </script>
+  <script src="config.js"></script>
   <script src="wizard-schema.js"></script>
   <script type="text/babel" src="tweaks-panel.jsx"></script>
   <script type="text/babel" src="report.jsx"></script>

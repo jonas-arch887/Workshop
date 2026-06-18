@@ -34,8 +34,7 @@ async function saveToSupabase(userId, answers, ranking, email, status) {
     answers,
     updated_at: new Date().toISOString(),
   }, { onConflict: "user_id" });
-  if (error) console.error("[FH] Supabase Fehler:", error);
-  else console.log("[FH] Supabase gespeichert ✓ status=", status);
+  if (error) console.error("[FH] Supabase Speichern fehlgeschlagen:", error.message || "unbekannter Fehler");
 }
 
 /* ---------- conditional logic ---------- */
@@ -76,7 +75,7 @@ function blockProgress(block, answers) {
    ========================================================= */
 function RouteMotif({ progress = 0.5, animated = false }) {
   return (
-    <svg className={"route-motif" + (animated ? " is-animated" : "")} viewBox="0 0 240 40" fill="none" aria-hidden="true">
+    <svg className={"route-motif" + (animated ? " is-animated" : "")} viewBox="0 0 240 40" fill="none" aria-hidden="true" style={{ "--route-len": Math.round(208 * progress) }}>
       <line x1="16" y1="20" x2="224" y2="20" className="route-base" />
       <line x1="16" y1="20" x2={16 + 208 * progress} y2="20" className="route-fill" />
       <circle cx="16" cy="20" r="5" className="route-dot start" />
@@ -259,8 +258,8 @@ function IntroScreen({ onStart, hasProgress, userProfile }) {
   const firma = userProfile?.firma || null;
   return (
     <div className="screen screen--intro">
-      <div className="intro-eyebrow">FrachtHub · Analyse-Workshop{firma ? ` · ${firma}` : ""}</div>
-      <h1 className="intro-title">{firstName ? `Hallo ${firstName} —` : "Bevor wir uns zusammensetzen,"}<br /><em>{firstName ? "schön, dass ihr dabei seid." : "schauen wir genau hin."}</em></h1>
+      <div className="intro-eyebrow">FRACHTHUB · Analyse-Workshop</div>
+      <h1 className="intro-title">{firstName ? `Hallo ${firstName},` : "Bevor wir uns zusammensetzen,"}<br /><em>{firstName ? "schön, dass ihr dabei seid." : "schauen wir genau hin."}</em></h1>
       <p className="intro-lead" style={{ textAlign: "justify" }}>Dieser Fragebogen ist die Vorbereitung für euren Analyse-Workshop. Ihr geht einmal strukturiert durch eure Prozesse von der Dispo bis zur Reklamation. Im Workshop steigen wir dann nicht bei Null ein, sondern direkt dort, wo es bei euch wirklich hakt.
 
       </p>
@@ -293,7 +292,7 @@ function RankingScreen({ themes, ranking, setRanking }) {
       <header className="screen-head">
         <div className="kicker"><span className="kicker-dot" />Block 12 · Priorisierung</div>
         <h1 className="screen-title">Wo drückt der Schuh am meisten?</h1>
-        <p className="screen-intro">Ihr habt jetzt alle Bereiche durchgegangen. Wählt die <strong>drei Themen</strong>, die für euch aktuell am wichtigsten sind — in der Reihenfolge ihrer Dringlichkeit.</p>
+        <p className="screen-intro">Ihr seid jetzt alle Bereiche durchgegangen. Wählt bitte die <strong>drei Themen</strong> aus, die für euch aktuell am wichtigsten sind, und bringt sie direkt in die richtige Reihenfolge nach Dringlichkeit.</p>
       </header>
       <div className="rank-hint">
         <span className={"rank-slot" + (ranking[0] ? " is-filled" : "")}>1</span>
@@ -325,21 +324,27 @@ function SubmitScreen() {
     <div className="screen screen--submit">
       <RouteMotif progress={1} animated />
       <h2 className="submit-title">Wird übermittelt …</h2>
-      <p className="submit-sub">Eure Antworten landen verschlüsselt bei FrachtHub. Ihr entscheidet, wo eure Daten liegen.</p>
+      <p className="submit-sub">Eure Antworten landen verschlüsselt bei Frachthub. Ihr entscheidet, wo eure Daten liegen.</p>
     </div>);
 
 }
 
 function ResultScreen({ themes, ranking, answers, email, setEmail, onReport, onEdit, onReset }) {
+  const [emailError, setEmailError] = useState(false);
   const top = ranking.map((id, i) => ({ ...themes.find((t) => t.id === id), pos: i + 1 })).filter((t) => t.area);
   const firma = answers.unternehmen ? answers.unternehmen : "euch";
+  function handleReport() {
+    if (!email || !email.trim()) { setEmailError(true); return; }
+    setEmailError(false);
+    onReport();
+  }
   return (
     <div className="screen screen--result">
       <div className="result-check">
         <svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
       </div>
       <div className="intro-eyebrow">Analyse abgeschlossen</div>
-      <h1 className="intro-title result-title">Danke — das ist eine<br /><em>starke Grundlage.</em></h1>
+      <h1 className="intro-title result-title">Danke, das ist eine<br /><em>Starke Grundlage.</em></h1>
       <p className="intro-lead">Wir haben alles, um den Workshop für {firma} gezielt vorzubereiten. Hier ist, worauf wir uns zuerst konzentrieren werden.</p>
 
       <div className="result-block">
@@ -360,20 +365,21 @@ function ResultScreen({ themes, ranking, answers, email, setEmail, onReport, onE
 
       <div className="result-block result-report">
         <div className="result-block-h">Euer Analyse-Bericht</div>
-        <p className="result-report-lead">Wir haben eure Antworten zu einem Bericht zusammengefasst — Prioritäten, Antworten und passende Ansätze auf einen Blick. Gebt eine E-Mail an, dann schicken wir ihn euch als PDF.</p>
+        <p className="result-report-lead">Ich habe eure Antworten zu einem Bericht zusammengefasst, damit ihr alle Prioritäten und passende Ansätze direkt auf einen Blick habt. Trag bitte kurz eure E-Mail-Adresse ein, dann schicke ich euch den Bericht direkt als PDF zu.</p>
         <div className="result-mailrow">
-          <input className="inp" type="email" placeholder="name@firma.de (optional)" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <button className="btn btn--primary" onClick={onReport}>Bericht ansehen<span className="btn-arrow">→</span></button>
+          <input className={`inp${emailError ? ' inp--error' : ''}`} type="email" placeholder="name@firma.de" value={email} onChange={(e) => { setEmail(e.target.value); if (emailError) setEmailError(false); }} />
+          <button className="btn btn--primary" onClick={handleReport}>Bericht ansehen<span className="btn-arrow">→</span></button>
         </div>
-        <p className="result-mailnote">Beim Absenden geht der Bericht automatisch an diese Adresse — und eine Kopie an FrachtHub.</p>
+        {emailError && <p className="result-mail-error">Bitte E-Mail-Adresse eintragen — der Bericht kann sonst nicht zugestellt werden.</p>}
+        <p className="result-mailnote">Beim Absenden schicke ich den Bericht automatisch an diese Adresse. Eine Kopie geht dabei auch direkt an mich.</p>
       </div>
 
       <div className="result-block">
         <div className="result-block-h">Was als Nächstes passiert</div>
         <ol className="steps-list">
-          <li><span className="steps-n">1</span><div><strong>Jonas sichtet eure Antworten.</strong> Gelernter Speditionskaufmann — er liest das mit dem Auge fürs Tagesgeschäft, nicht nur fürs Tool.</div></li>
-          <li><span className="steps-n">2</span><div><strong>Wir melden uns für den Workshop-Termin.</strong> 90 Minuten, in denen wir die Top-Themen schärfen und die ein bis zwei größten Hebel festlegen.</div></li>
-          <li><span className="steps-n">3</span><div><strong>Ihr bekommt einen konkreten Umsetzungsplan.</strong> Die 1.500 € für den Workshop werden voll auf die Umsetzung angerechnet.</div></li>
+          <li><span className="steps-n">1</span><div><strong>Ich schaue mir eure Antworten und Probleme jetzt genau an,</strong> mache mir meine Gedanken und arbeite konkrete Punkte für euch aus. Dabei fange ich direkt mit den Themen an, die aktuell die höchste Priorität für euch haben.</div></li>
+          <li><span className="steps-n">2</span><div><strong>Ich melde mich in den nächsten Tagen mit einem Terminvorschlag bei euch.</strong> In einem neuen, 90-minütigen Termin präsentiere ich euch meine konkreten Ausarbeitungen und wir legen gemeinsam die ein bis zwei größten Hebel fest.</div></li>
+          <li><span className="steps-n">3</span><div><strong>Ihr bekommt einen konkreten Umsetzungsplan.</strong> Die 1.000€ für den Workshop werden voll auf die Umsetzung angerechnet.</div></li>
         </ol>
       </div>
 
@@ -381,7 +387,7 @@ function ResultScreen({ themes, ranking, answers, email, setEmail, onReport, onE
         <button className="btn btn--ghost" onClick={onEdit}>Antworten ansehen</button>
         <button className="btn btn--ghostlight" onClick={onReset}>Neu starten</button>
       </div>
-      <p className="intro-fine">Eure Antworten sind gespeichert — ihr könnt jederzeit zurück und ergänzen.</p>
+      <p className="intro-fine">Ich habe eure Antworten gesichert. Ihr habt jederzeit die Möglichkeit, zurückzugehen und eure Punkte zu ergänzen.</p>
     </div>);
 
 }
@@ -412,6 +418,15 @@ function App() {
 
   // Auth-Check beim Start
   useEffect(() => {
+    // Dev-Bypass: nur lokal UND nur wenn in config.js explizit aktiviert.
+    // Production-Builds liefern config.js mit devAuthBypass nicht aus → Bypass greift nie.
+    const isLocal = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+    if (isLocal && window.FH_CONFIG && window.FH_CONFIG.devAuthBypass === true) {
+      userId.current = "dev-local";
+      setUserProfile({ name: "Jonas Flucke", firma: "FrachtHub" });
+      setAuthState("ok");
+      return;
+    }
     if (!window.supabaseClient) { setAuthState("none"); return; }
     async function initAuth() {
       const { data: { user } } = await window.supabaseClient.auth.getUser();

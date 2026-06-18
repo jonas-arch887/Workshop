@@ -6,6 +6,9 @@ node_modules/
 .env.local
 .env.*
 
+# Webhook-Konfiguration (enthält Secret)
+config.js
+
 # System
 .DS_Store
 Thumbs.db

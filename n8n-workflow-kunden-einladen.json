@@ -47,7 +47,8 @@
       "parameters": {
         "method": "POST",
         "url": "https://bspsckyzjdrytlpxpdjr.supabase.co/functions/v1/invite-user",
-        "authentication": "none",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "keypair",
         "bodyParameters": {
@@ -72,7 +73,13 @@
       "name": "Supabase: User einladen",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [480, 300]
+      "position": [480, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "JAx2v9ayeouJazod",
+          "name": "Workshop: Invite Secret (x-invite-secret)"
+        }
+      }
     }
   ],
   "connections": {

@@ -1,11 +1,16 @@
 /* =========================================================
-   FrachtHub Analyse-Workshop — Analyse-Bericht (hell, druckbar)
-   Wird aus den Antworten generiert; im echten Stack als PDF
-   per n8n an den Kunden + Benachrichtigung an FrachtHub.
+   FrachtHub Analyse-Workshop — Analyse-Bericht
+   Lädt die GitHub-Vorlage und füllt Platzhalter mit echten Daten.
    Exports: window.ReportView, window.fhFormatAnswer
    ========================================================= */
 (function () {
   const { useEffect, useState } = React;
+
+  const TEMPLATE_URL = 'https://raw.githubusercontent.com/jonas-arch887/Frachthub-Vorlagen-ffentlich-/main/Analyse-Bericht.html';
+
+  function esc(s) {
+    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
 
   function fhFormatAnswer(field, answers) {
     if (field.type === "triple") {
@@ -34,45 +39,136 @@
     return out;
   }
 
-  function AnsweredBlock({ block, answers, showAll }) {
-    let rows = blockFields(block)
-      .map(({ field, group }) => ({ field, group, val: fhFormatAnswer(field, answers) }));
-    if (!showAll) rows = rows.filter((r) => r.val != null);
-    if (rows.length === 0) return null;
-    return (
-      <section className="report-block">
-        <div className="report-block-head">
-          <span className="report-block-num">{String(block.num).padStart(2, "0")}</span>
-          <h3>{block.kicker}</h3>
-        </div>
-        <div className="report-qa">
-          {rows.map((r, i) => (
-            <div className="report-row" key={i}>
-              <div className="report-q">{r.group && <span className={"report-tag report-tag--" + (r.group === "Problem" ? "p" : "l")}>{r.group}</span>}{r.field.label}</div>
-              {r.val == null
-                ? <div className="report-a report-a--empty">Nicht beantwortet</div>
-                : Array.isArray(r.val)
-                ? <ul className="report-a-list">{r.val.map((x, j) => <li key={j}>{x}</li>)}</ul>
-                : <div className="report-a">{r.val}</div>}
+  function buildHtml(templateHtml, blocks, answers, ranking, themes, showAll) {
+    const date = new Date().toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric" });
+    const firma = answers.unternehmen || '—';
+    const person = answers.ansprechpartner || '';
+
+    const top = ranking
+      .map((id, i) => ({ ...themes.find(x => x.id === id), pos: i + 1 }))
+      .filter(x => x.area);
+
+    const prioHtml = top.map(tp => `
+      <div class="prio-item">
+        <div class="prio-num">${esc(String(tp.pos))}</div>
+        <div class="prio-area">${esc(tp.area)}</div>
+        <div class="prio-module">${esc(tp.module)}</div>
+      </div>
+    `).join('');
+
+    const antwortHtml = blocks.map(b => {
+      const rows = blockFields(b)
+        .map(({ field }) => {
+          const val = fhFormatAnswer(field, answers);
+          if (!showAll && val == null) return '';
+          let answerHtml;
+          if (val == null) {
+            answerHtml = '<div class="qa-answer qa-answer--empty">Nicht beantwortet</div>';
+          } else if (Array.isArray(val)) {
+            answerHtml = `<div class="qa-answer">${val.map(v => esc(v)).join('<br>')}</div>`;
+          } else {
+            answerHtml = `<div class="qa-answer">${esc(String(val))}</div>`;
+          }
+          return `
+            <div class="qa-row">
+              <div class="qa-question">${esc(field.label)}</div>
+              ${answerHtml}
             </div>
-          ))}
+          `;
+        })
+        .filter(Boolean)
+        .join('');
+
+      if (!rows) return '';
+
+      return `
+        <div class="block">
+          <div class="block-header">
+            <div class="block-num">${String(b.num).padStart(2, '0')}</div>
+            <div class="block-title">${esc(b.kicker)}</div>
+          </div>
+          <div class="qa-list">${rows}</div>
         </div>
-      </section>
-    );
+      `;
+    }).filter(Boolean).join('');
+
+    return templateHtml
+      .replace('{{DATUM}}', esc(date))
+      .replace('{{FIRMA}}', esc(firma))
+      .replace('{{PERSON}}', esc(person))
+      .replace('{{PRIORITAETEN}}', prioHtml)
+      .replace('{{ANTWORTEN}}', antwortHtml);
   }
 
   function ReportView({ blocks, answers, ranking, themes, email, onClose }) {
     const [showAll, setShowAll] = useState(true);
+    const [sendState, setSendState] = useState('idle');
+    const [templateHtml, setTemplateHtml] = useState('');
+    const [iframeContent, setIframeContent] = useState('');
+
     useEffect(() => {
       const onKey = (e) => { if (e.key === "Escape") onClose(); };
       window.addEventListener("keydown", onKey);
       return () => window.removeEventListener("keydown", onKey);
     }, [onClose]);
 
-    const top = ranking.map((id, i) => ({ ...themes.find((x) => x.id === id), pos: i + 1 })).filter((x) => x.area);
-    const date = new Date().toLocaleDateString("de-DE", { day: "2-digit", month: "long", year: "numeric" });
-    const firma = answers.unternehmen || "—";
-    const person = answers.ansprechpartner || "";
+    useEffect(() => {
+      fetch(TEMPLATE_URL)
+        .then(r => r.text())
+        .then(html => setTemplateHtml(html))
+        .catch(err => console.error('[FH] Template laden fehlgeschlagen:', err));
+    }, []);
+
+    useEffect(() => {
+      if (!templateHtml) return;
+      setIframeContent(buildHtml(templateHtml, blocks, answers, ranking, themes, showAll));
+    }, [templateHtml, showAll]);
+
+    async function handleSend() {
+      setSendState('sending');
+      try {
+        const cfg = window.FH_CONFIG || {};
+        const priorities = ranking
+          .map((id, i) => ({ ...themes.find(x => x.id === id), pos: i + 1 }))
+          .filter(t => t.area)
+          .map(t => ({ pos: t.pos, area: t.area, module: t.module }));
+
+        const blocksPayload = blocks
+          .map(b => {
+            const rows = blockFields(b)
+              .map(({ field }) => {
+                const val = fhFormatAnswer(field, answers);
+                const value = val == null ? null : (Array.isArray(val) ? val.join(' · ') : String(val));
+                return { label: field.label, value };
+              })
+              .filter(q => showAll || q.value !== null);
+            return { num: b.num, kicker: b.kicker, qa: rows };
+          })
+          .filter(b => b.qa.length > 0);
+
+        const payload = {
+          email: email.trim(),
+          firma: answers.unternehmen || '',
+          person: answers.ansprechpartner || '',
+          priorities,
+          blocks: blocksPayload
+        };
+
+        const headers = { 'Content-Type': 'application/json' };
+        if (cfg.webhookSecret) headers['X-Frachthub-Key'] = cfg.webhookSecret;
+
+        const res = await fetch(cfg.webhookUrl || 'https://n8n.frachthub.com/webhook/workshop-analyse', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        setSendState('done');
+      } catch (e) {
+        console.error('[FH] Webhook Fehler:', e);
+        setSendState('error');
+      }
+    }
 
     return (
       <div className="report">
@@ -82,71 +178,22 @@
             <button className={showAll ? "is-on" : ""} onClick={() => setShowAll(true)}>Alle Fragen</button>
             <button className={!showAll ? "is-on" : ""} onClick={() => setShowAll(false)}>Nur beantwortete</button>
           </div>
-          <button className="rbtn rbtn--primary" onClick={() => window.print()}>Als PDF speichern</button>
-        </div>
-
-        <div className="report-scroll">
-          <div className="report-doc">
-            <header className="report-head">
-              <img className="report-logo" src="assets/wordmark-horizontal-black.svg" alt="FrachtHub" />
-              <div className="report-head-meta">
-                <div className="report-doc-type">Prozess-Analyse</div>
-                <div className="report-date">{date}</div>
-              </div>
-            </header>
-
-            <div className="report-hero">
-              <div className="report-eyebrow">Analyse-Bericht zur Workshop-Vorbereitung</div>
-              <h1>{firma}</h1>
-              {person && <div className="report-person">{person}</div>}
-              <p className="report-lead">{showAll
-                ? "Diese Dokumentation hält alle Fragen der Prozess-Analyse samt euren Antworten fest — eine vollständige Grundlage für den gemeinsamen Workshop und euer Nachschlagewerk darüber, wo aktuell die größten Hebel liegen."
-                : "Diese Zusammenfassung bündelt eure beantworteten Fragen aus der Prozess-Analyse. Sie ist die Grundlage für den gemeinsamen Workshop — und euer Überblick darüber, wo aktuell die größten Hebel liegen."}</p>
-            </div>
-
-            {top.length > 0 && (
-              <div className="report-prio">
-                <div className="report-prio-h">Eure Prioritäten</div>
-                <div className="report-prio-grid">
-                  {top.map((tp) => (
-                    <div className="report-prio-item" key={tp.id}>
-                      <span className="report-prio-num">{tp.pos}</span>
-                      <div>
-                        <div className="report-prio-area">{tp.area}</div>
-                        <div className="report-prio-mod">Passender Ansatz · {tp.module}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="report-body">
-              {blocks.map((b) => <AnsweredBlock key={b.id} block={b} answers={answers} showAll={showAll} />)}
-            </div>
-
-            <div className="report-next">
-              <div className="report-next-h">Wie es weitergeht</div>
-              <ol>
-                <li><strong>Sichtung.</strong> Wir gehen eure Antworten als gelernte Speditionskaufleute durch — mit Blick aufs Tagesgeschäft, nicht nur aufs Tool.</li>
-                <li><strong>Workshop.</strong> 90 Minuten, in denen wir die Top-Themen schärfen und die ein bis zwei größten Hebel festlegen.</li>
-                <li><strong>Umsetzungsplan.</strong> Konkrete nächste Schritte. Die 1.500 € für den Workshop werden voll auf die Umsetzung angerechnet.</li>
-              </ol>
-            </div>
-
-            <footer className="report-foot">
-              <div className="report-foot-l">
-                <div className="report-foot-name">Jonas Flucke</div>
-                <div className="report-foot-role">Gründer &amp; Geschäftsführer · FrachtHub</div>
-              </div>
-              <div className="report-foot-r">
-                <div>jonas.flucke@frachthub.com</div>
-                <div>+49 176 43648192 · frachthub.com</div>
-              </div>
-            </footer>
-            {email && <div className="report-sentto">Wird gesendet an: {email}</div>}
+          <div className="report-send-wrap">
+            {sendState === 'done'
+              ? <button className="rbtn rbtn--success" disabled>✓ Bericht wird zugestellt</button>
+              : sendState === 'sending'
+              ? <button className="rbtn rbtn--primary" disabled>Wird gesendet…</button>
+              : sendState === 'error'
+              ? <button className="rbtn rbtn--primary" onClick={handleSend}>Erneut versuchen</button>
+              : <button className="rbtn rbtn--primary" onClick={handleSend}>Bericht senden</button>
+            }
+            {sendState === 'error' && <div className="report-send-error">Versand fehlgeschlagen — bitte erneut versuchen.</div>}
           </div>
         </div>
+        {iframeContent
+          ? <iframe className="report-frame" srcDoc={iframeContent} title="Analyse-Bericht" sandbox="" />
+          : <div className="report-frame-loading">Vorlage wird geladen…</div>
+        }
       </div>
     );
   }

@@ -15,7 +15,7 @@
       kicker: "Unternehmen & Struktur",
       title: "Erst der Kontext.",
       intro:
-        "Reiner Setup-Block, keine Wertung — nur damit wir im Workshop sofort auf demselben Stand sind.",
+        "Kurzer Abgleich vorab: Das ist nur ein kleiner Setup-Block ohne Bewertung. So stellen wir sicher, dass wir im Workshop alle die gleiche Ausgangsbasis haben.",
       fields: [
         { id: "unternehmen", type: "text", label: "Unternehmensname", placeholder: "z. B. Müller Spedition GmbH" },
         { id: "ansprechpartner", type: "text", label: "Ansprechpartner — Name & Position", placeholder: "z. B. Anna Berg, Geschäftsführerin" },
@@ -46,22 +46,22 @@
       num: 2,
       kicker: "Dispo, Tourenplanung & Kapazität",
       title: "Wie Touren entstehen.",
-      intro: "Wie eure Touren zustande kommen — und wie viel Auslastung dabei liegen bleibt.",
+      intro: "Wie eure Touren aktuell entstehen und wie viel Potenzial ihr dabei auf der Straße liegen lasst.",
       area: "Dispo, Tourenplanung & Kapazitätsauslastung",
       module: "Automatische Tourenplanung & Kapazitäts­ausgleich",
       sections: [
         {
           label: "Problem", fields: [
             { id: "b2_q1", type: "scale", label: "Wie oft kam es in den letzten 3 Monaten vor, dass ein LKW eine Tour mit deutlich unter 80 % Auslastung (Tonnage/Lademeter) gefahren ist?", options: ["Nie", "Selten", "Mehrmals pro Monat", "Wöchentlich"] },
-            { id: "b2_q2", type: "textarea", label: "Wenn kurzfristig eine Fracht abspringt — wie läuft die Suche nach einer Ersatzladung ab, und wie lange dauert das im Schnitt?" },
-            { id: "b2_q3", type: "number", label: "Wie viele Stunden verbringt eure Dispo täglich mit der manuellen Tourenplanung und -anpassung?", suffix: "Std/Tag" },
+            { id: "b2_q2", type: "textarea", label: "Was passiert, wenn euch kurzfristig eine Fracht abspringt? Wie läuft die Suche nach Ersatz bei euch ab und wie viel Zeit geht dabei im Schnitt verloren?" },
+            { id: "b2_q3", type: "number", label: "Wie viele Stunden verbringt eure Dispo täglich mit der manuellen Tourenplanung und den ganzen Anpassungen?", suffix: "Std/Tag" },
           ],
         },
         {
           label: "Lösung", fields: [
             { id: "b2_q4", type: "yesno", label: "Nutzt ihr ein System, das Touren automatisch nach Kapazitätslogik (max. Gewicht/Lademeter) und geografischer Nähe zusammenstellt?" },
             { id: "b2_q5", type: "choice", label: "Kennt ihr eure Selbstkosten pro km bzw. pro Tour genau, oder basiert die Preiskalkulation eher auf Erfahrungswerten?", options: ["Genau bekannt", "Erfahrungswerte"] },
-            { id: "b2_q6", type: "yesno", label: "Gibt es eine automatische Frühwarnung, wenn sich eine Tour verzögert — oder erfährt der Kunde das erst auf Nachfrage?" },
+            { id: "b2_q6", type: "yesno", label: "Gibt es bei euch eine automatische Frühwarnung bei Tour-Verzögerungen oder erfährt der Kunde das erst auf Nachfrage?" },
           ],
         },
       ],
@@ -81,9 +81,9 @@
       sections: [
         {
           label: "Problem", fields: [
-            { id: "b3_q1", type: "textarea", label: "Wie läuft aktuell die Kommunikation zwischen euren Standorten ab, wenn einer freie Kapazität hat und ein anderer eine passende Ladung?", placeholder: "z. B. Telefon, E-Mail, WhatsApp …" },
-            { id: "b3_q2", type: "scale", label: "Wie oft kam es vor, dass ein Standort eine passende Rückfracht für einen anderen hatte, davon aber gar nicht oder zu spät erfahren hat?", options: ["Nie", "Selten", "Häufig"] },
-            { id: "b3_q3", type: "text", label: "Wenn ein Standort eine Anfrage an einen anderen schickt — wie lange dauert es im Schnitt, bis eine Antwort kommt?", placeholder: "z. B. ca. 4 Stunden" },
+            { id: "b3_q1", type: "textarea", label: "Wie läuft aktuell die Kommunikation zwischen euren Standorten ab?", placeholder: "z. B. Telefon, E-Mail, WhatsApp …" },
+            { id: "b3_q2", type: "scale", label: "Wie oft kam es schon vor, dass ein Standort eine passende Rückfracht für einen anderen gehabt hätte, man davon aber gar nichts oder einfach zu spät erfahren hat?", options: ["Nie", "Selten", "Häufig"] },
+            { id: "b3_q3", type: "text", label: "Wenn ein Standort eine Anfrage an die Kollegen stellt, wie viel Zeit vergeht dann im Schnitt bis zur Rückmeldung?", placeholder: "z. B. ca. 4 Stunden" },
           ],
         },
         {
@@ -101,13 +101,13 @@
       num: 4,
       kicker: "Auftragsabwicklung & Dokumente",
       title: "Vom Auftrag bis zum Dokument.",
-      intro: "Wie aus einem Auftrag ein Dokument in der Fahrerhand wird.",
+      intro: "Wie aus einem eingehenden Auftrag die fertigen Dokumente auf dem Display eurer Fahrer werden.",
       area: "Auftragsabwicklung & Dokumente",
       module: "Dokumentenverarbeitung & Lieferscheine",
       sections: [
         {
           label: "Problem", fields: [
-            { id: "b4_q1", type: "textarea", label: "Wie werden aktuell Lieferscheine/Frachtbriefe für eure Fahrer erstellt und ausgegeben — digital oder auf Papier?" },
+            { id: "b4_q1", type: "textarea", label: "Wie läuft die Erstellung und Ausgabe von Lieferscheinen und Frachtbriefen aktuell ab? Läuft das bei euch noch auf Papier oder schon komplett digital?" },
             { id: "b4_q2", type: "text", label: "Wie viel Zeit geht pro Auftrag fürs Erfassen/Übertragen von Dokumenten (Frachtbrief, Rechnung, Zollpapiere) in eure Systeme verloren?", placeholder: "z. B. 15 Min/Auftrag oder 2 Std/Tag" },
             { id: "b4_q3", type: "scale", label: "Wie oft kommt es zu Verzögerungen am Hof, weil Fahrer auf Papierdokumente warten müssen?", options: ["Nie", "Selten", "Häufig", "Täglich"] },
           ],
@@ -115,7 +115,7 @@
         {
           label: "Lösung", fields: [
             { id: "b4_q4", type: "choice", label: "Werden Dokumente (Frachtbrief, Rechnung etc.) automatisch zwischen euren Systemen (TMS/ERP, Buchhaltung) übertragen, oder manuell mehrfach eingegeben?", options: ["Automatisch", "Manuell"] },
-            { id: "b4_q5", type: "choice", label: "Erhalten eure Fahrer Dokumente digital (App/E-Mail), oder läuft das über Papier?", options: ["Digital", "Papier", "Gemischt"] },
+            { id: "b4_q5", type: "choice", label: "Erhalten eure Fahrer Dokumente digital (App/Scanner), oder läuft das über Papier?", options: ["Digital", "Papier", "Gemischt"] },
           ],
         },
       ],
@@ -127,7 +127,7 @@
       num: 5,
       kicker: "Kunden-Kommunikation & Follow-up",
       title: "Wie schnell der Kunde Antwort bekommt.",
-      intro: "Wie schnell eine Anfrage beantwortet wird — und ob das Follow-up tatsächlich passiert.",
+      intro: "Ein Blick auf die Reaktionszeit: Wie schnell reagiert ihr auf Anfragen und wie verlässlich läuft das anschließende Nachfassen?",
       area: "Kunden-Kommunikation & Follow-up",
       module: "E-Mail-Triage & Follow-up-Automation",
       sections: [
@@ -153,7 +153,7 @@
       num: 6,
       kicker: "IT-Systeme & Schnittstellen",
       title: "Ob eure Systeme miteinander reden.",
-      intro: "Ob eure Systeme miteinander reden — oder nebeneinander her arbeiten.",
+      intro: "Sprechen eure Systeme eigentlich miteinander oder arbeiten sie eher nebeneinander her?",
       area: "IT-Systeme & Schnittstellen",
       module: "Schnittstellen & KPI-Dashboards",
       sections: [
@@ -161,7 +161,7 @@
           label: "Problem", fields: [
             { id: "b6_q1", type: "textarea", label: "Welche Software-Systeme nutzt ihr aktuell (TMS/ERP, Buchhaltung, CRM, Microsoft 365 etc.), und wie gut tauschen die Daten miteinander aus?" },
             { id: "b6_q2", type: "number", label: "Wie viel Zeit verbringt euer Team insgesamt pro Woche damit, Daten manuell zwischen Systemen zu übertragen oder abzugleichen?", suffix: "Std/Woche" },
-            { id: "b6_q3", type: "choice", label: "Wie aktuell sind eure KPI-Auswertungen (Umsatz, Auslastung etc.) — täglich verfügbar oder erst am Monatsende zusammengetragen?", options: ["Echtzeit / täglich", "Wöchentlich", "Monatlich"] },
+            { id: "b6_q3", type: "choice", label: "Wie aktuell sind eure KPI-Auswertungen wie Umsatz und Auslastung? Habt ihr die Zahlen täglich parat oder werden sie erst am Monatsende mühsam zusammengetragen?", options: ["Echtzeit / täglich", "Wöchentlich", "Monatlich"] },
           ],
         },
         {
@@ -179,13 +179,13 @@
       num: 7,
       kicker: "Team, Wissen & Onboarding",
       title: "Was passiert, wenn Wissen ausfällt.",
-      intro: "Was passiert, wenn das Wissen einzelner Köpfe gerade nicht da ist.",
+      intro: "Was passiert, wenn das Wissen einzelner Köpfe gerade nicht da ist?",
       area: "Team, Wissen & Onboarding",
       module: "Wissensdokumentation & Vertretung",
       sections: [
         {
           label: "Problem", fields: [
-            { id: "b7_q1", type: "textarea", label: "Wenn ein erfahrener Mitarbeiter (z. B. ein Disponent) krank wird oder in Urlaub geht — läuft das Geschäft normal weiter, oder entstehen merkliche Lücken?" },
+            { id: "b7_q1", type: "textarea", label: "Wenn ein erfahrener Mitarbeiter wie ein Disponent krank wird oder in den Urlaub geht, läuft das Geschäft dann bei euch ganz normal weiter oder entstehen sofort spürbare Lücken?" },
             { id: "b7_q2", type: "text", label: "Wie lange dauert es im Schnitt, bis ein neuer Mitarbeiter in Disposition/Verwaltung eigenständig arbeiten kann?", placeholder: "z. B. ca. 3 Monate" },
             { id: "b7_q3", type: "scale", label: "Wie oft werden Mitarbeiter pro Tag durch Rückfragen von Kollegen unterbrochen, die eigentlich woanders dokumentiert sein könnten?", options: ["Selten", "Mehrmals täglich", "Ständig"] },
           ],
@@ -193,7 +193,7 @@
         {
           label: "Lösung", fields: [
             { id: "b7_q4", type: "yesno", label: "Gibt es eine zentrale Dokumentation für wiederkehrende Abläufe (Wiki, Handbuch o. ä.), die jeder einsehen kann?" },
-            { id: "b7_q5", type: "choice", label: "Gibt es ein strukturiertes Onboarding-Programm für neue Mitarbeiter, oder lernt man „on the job“ durch Zusehen?", options: ["Strukturiert", "On the job"] },
+            { id: "b7_q5", type: "choice", label: "Werden neue Kollegen nach einem festen Plan eingearbeitet oder läuft das eher so ab, dass man direkt in die Praxis geworfen wird und den anderen über die Schulter schaut?", options: ["Strukturiert", "Praxis"] },
           ],
         },
       ],
@@ -205,7 +205,7 @@
       num: 8,
       kicker: "Reklamationen & Qualität",
       title: "Aus Reklamationen lernen.",
-      intro: "Wie aus Reklamationen Lehren werden — oder eben nicht.",
+      intro: "Wie aus Reklamationen echte Lehren gezogen werden oder das wertvolle Feedback am Ende eben doch einfach verpufft.",
       area: "Reklamationen & Qualität",
       module: "Reklamations- & Schadensbearbeitung",
       sections: [
@@ -218,7 +218,7 @@
         },
         {
           label: "Lösung", fields: [
-            { id: "b8_q4", type: "choice", label: "Werden Reklamationen/Schadensfälle systematisch erfasst und ausgewertet (nach Häufigkeit, Ursache, Kunde), oder läuft das eher ad-hoc?", options: ["Systematisch", "Ad-hoc"] },
+            { id: "b8_q4", type: "choice", label: "Erfasst ihr Reklamationen und Schadensfälle systematisch nach klaren Kriterien wie Ursache und Häufigkeit oder reagiert ihr eher spontan und von Fall zu Fall?", options: ["Systematisch", "Spontan"] },
             { id: "b8_q5", type: "yesno", label: "Gibt es einen automatisierten Workflow, der Reklamationen direkt an die richtige Stelle/Person weiterleitet?" },
           ],
         },
@@ -239,9 +239,9 @@
       sections: [
         {
           label: "Problem", fields: [
-            { id: "b9_q1", type: "textarea", label: "Wie erfährt eure Logistik/Versandabteilung, wann ein Auftrag aus der Produktion versandfertig ist — automatisch über ein System oder durch Zuruf/manuelle Meldung?" },
+            { id: "b9_q1", type: "textarea", label: "Der Informationsfluss zwischen Produktion und Versand: Läuft die Fertigmeldung automatisch über euer System oder per manuellem Zuruf?" },
             { id: "b9_q2", type: "scale", label: "Wie oft verzögert sich die Versandplanung, weil Infos aus der Produktion zu spät bei der Logistik ankommen?", options: ["Nie", "Selten", "Häufig"] },
-            { id: "b9_q3", type: "choice", label: "Wie läuft der Abgleich zwischen Wareneingang (von Lieferanten) und eurem Lagerbestand im ERP — automatisch oder manuell?", options: ["Automatisch", "Manuell"] },
+            { id: "b9_q3", type: "choice", label: "Wie läuft der Abgleich zwischen dem Wareneingang von euren Lieferanten und dem Lagerbestand im ERP ab? Geht das schon automatisch oder müsst ihr das noch manuell eintragen?", options: ["Automatisch", "Manuell"] },
           ],
         },
         {
@@ -259,7 +259,7 @@
       num: 10,
       kicker: "Ziele & Ambitionen",
       title: "Wohin ihr wollt.",
-      intro: "Wohin ihr wollt — und was euch gerade davon abhält.",
+      intro: "Ein Blick auf eure Ziele: Wo soll die Reise hingehen und welche Hürden stehen euch heute noch im Weg?",
       fields: [
         { id: "b10_q1", type: "textarea", label: "Was ist euer wichtigstes geschäftliches Ziel für die nächsten 6–12 Monate?", placeholder: "z. B. Wachstum, neue Standorte, höhere Marge, Digitalisierung …" },
         { id: "b10_q2", type: "choice", label: "Wo steht ihr aktuell auf dem Weg zu diesem Ziel?", options: ["Ganz am Anfang", "Mittendrin", "Kurz vor dem Ziel"] },
